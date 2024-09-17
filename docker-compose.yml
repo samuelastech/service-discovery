@@ -1,0 +1,25 @@
+services:
+  discovery:
+    container_name: discovery
+    image: samuelastech/discovery
+    restart: always
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    expose:
+      - "8081"
+    networks:
+      - microservices-network
+    volumes:
+      - .:/app
+      - /app/.m2
+    command: ./mvnw spring-boot:run
+    environment:
+      eureka.client.serviceUrl.defaultZone: http://discovery:8081/eureka/
+      eureka.client.registerWithEureka: 'false'
+      eureka.client.fetchRegistry: 'false'
+
+networks:
+  microservices-network:
+    external: true
